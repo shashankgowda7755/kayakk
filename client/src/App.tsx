@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/home";
 import InquiryPage from "@/pages/inquiry";
+import PrivacyPage from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
 import AdminGallery from "@/components/AdminGallery";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
@@ -14,6 +15,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/inquiry" component={InquiryPage} />
+      <Route path="/privacy" component={PrivacyPage} />
       <Route path="/admin" component={AdminGallery} />
       <Route component={NotFound} />
     </Switch>

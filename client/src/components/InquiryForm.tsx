@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import AgeConsentField from "@/components/AgeConsentField";
 
 const inquirySchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -21,6 +22,9 @@ const inquirySchema = z.object({
   preferredDate: z.string().min(1, "Please select a date"),
   preferredTime: z.string().min(1, "Please select a time"),
   specialRequests: z.string().optional(),
+  ageConfirm: z.literal(true, {
+    errorMap: () => ({ message: "Please confirm to continue" }),
+  }),
 });
 
 type InquiryFormData = z.infer<typeof inquirySchema>;
@@ -69,6 +73,7 @@ export default function InquiryForm({ selectedPackage, onClose, onSuccess }: Inq
       preferredDate: "",
       preferredTime: "",
       specialRequests: "",
+      ageConfirm: false as unknown as true,
     },
   });
 
@@ -110,8 +115,8 @@ export default function InquiryForm({ selectedPackage, onClose, onSuccess }: Inq
     },
   });
 
-  const onSubmit = (data: InquiryFormData) => {
-    createInquiry.mutate(data);
+  const onSubmit = ({ ageConfirm, ...data }: InquiryFormData) => {
+    createInquiry.mutate(data as InquiryFormData);
   };
 
   const handlePayment = () => {
@@ -377,6 +382,8 @@ export default function InquiryForm({ selectedPackage, onClose, onSuccess }: Inq
                 </FormItem>
               )}
             />
+
+            <AgeConsentField control={form.control} />
 
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button 
