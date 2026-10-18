@@ -11,13 +11,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import AgeConsentField from "@/components/AgeConsentField";
+
+const bookingFormSchema = insertBookingInquirySchema.extend({
+  ageConfirm: z.literal(true, {
+    errorMap: () => ({ message: "Please confirm to continue" }),
+  }),
+});
+type BookingFormData = InsertBookingInquiry & { ageConfirm: boolean };
 
 export default function BookingForm() {
   const { toast } = useToast();
   const [selectedExperiences, setSelectedExperiences] = useState<string[]>([]);
 
-  const form = useForm<InsertBookingInquiry>({
-    resolver: zodResolver(insertBookingInquirySchema),
+  const form = useForm<BookingFormData>({
+    resolver: zodResolver(bookingFormSchema) as any,
     defaultValues: {
       fullName: "",
       email: "",
@@ -27,6 +36,7 @@ export default function BookingForm() {
       checkOutDate: "",
       experiences: [],
       specialRequests: "",
+      ageConfirm: false,
     },
   });
 
@@ -52,7 +62,7 @@ export default function BookingForm() {
     },
   });
 
-  const onSubmit = (data: InsertBookingInquiry) => {
+  const onSubmit = ({ ageConfirm, ...data }: BookingFormData) => {
     bookingMutation.mutate({
       ...data,
       experiences: selectedExperiences,
@@ -279,6 +289,8 @@ export default function BookingForm() {
                     </FormItem>
                   )}
                 />
+
+                <AgeConsentField control={form.control} />
 
                 <div className="md:col-span-2">
                   <Button 

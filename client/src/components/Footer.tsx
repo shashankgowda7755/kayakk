@@ -78,7 +78,8 @@ export default function Footer() {
         
         <div className="border-t border-background/20 mt-8 pt-6 text-center">
           <p className="text-background/60 text-sm">
-            © 2024 Heaven of Munroe. All rights reserved.
+            © 2024 Heaven of Munroe. All rights reserved. ·{" "}
+            <a href="/privacy" className="underline hover:text-background">Privacy Policy</a>
           </p>
         </div>
       </div>
